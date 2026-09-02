@@ -1,5 +1,4 @@
 
-=======
 Only specific players are allowed to enter the server. After respawning, a player will be kicked out after a certain amount of time, and an event will be triggered when they reach a specific radius of a certain location.
 
 You can adjust the settings by modifying the config/blackannin_arg_mod-common.toml configuration file.
