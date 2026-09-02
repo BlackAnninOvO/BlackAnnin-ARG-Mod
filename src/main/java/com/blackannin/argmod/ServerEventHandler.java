@@ -53,6 +53,13 @@ public class ServerEventHandler {
             double spawnY = Config.SPAWN_Y.get();
             double spawnZ = Config.SPAWN_Z.get();
             player.teleportTo(player.serverLevel(), spawnX, spawnY, spawnZ, player.getYRot(), player.getXRot());
+
+            // 4. 状态恢复逻辑
+            if (Config.HEAL_ON_JOIN.get()) {
+                player.setHealth(player.getMaxHealth());
+                player.getFoodData().setFoodLevel(20);
+                player.getFoodData().setSaturation(5.0f); // 同时恢复饱和度
+            }
         }
     }
 

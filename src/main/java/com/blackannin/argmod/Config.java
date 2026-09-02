@@ -65,5 +65,10 @@ public class Config {
             .comment("超过游玩时长限制被踢出时的提示信息")
             .define("playtimeKickMessage", "你...怎么还不来找我...");
 
+    // 状态恢复设置
+    public static final ModConfigSpec.BooleanValue HEAL_ON_JOIN = BUILDER
+            .comment("玩家进入服务器时是否自动回满血量和饱食度")
+            .define("healOnJoin", true);
+
     static final ModConfigSpec SPEC = BUILDER.build();
 }
