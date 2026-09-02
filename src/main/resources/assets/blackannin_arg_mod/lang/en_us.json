@@ -1,0 +1,13 @@
+{
+  "itemGroup.blackannin_arg_mod": "Example Mod Tab",
+  "block.blackannin_arg_mod.example_block": "Example Block",
+  "item.blackannin_arg_mod.example_item": "Example Item",
+
+  "blackannin_arg_mod.configuration.title": "BlackAnnin ARG Mod Configs",
+  "blackannin_arg_mod.configuration.section.blackannin_arg_mod.common.toml": "BlackAnnin ARG Mod Configs",
+  "blackannin_arg_mod.configuration.section.blackannin_arg_mod.common.toml.title": "BlackAnnin ARG Mod Configs",
+  "blackannin_arg_mod.configuration.items": "Item List",
+  "blackannin_arg_mod.configuration.logDirtBlock": "Log Dirt Block",
+  "blackannin_arg_mod.configuration.magicNumberIntroduction": "Magic Number Text",
+  "blackannin_arg_mod.configuration.magicNumber": "Magic Number"
+}
