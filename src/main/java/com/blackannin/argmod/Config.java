@@ -45,5 +45,25 @@ public class Config {
     public static final ModConfigSpec.IntValue WARNING_TARGET_Y = BUILDER.defineInRange("targetY", 135, Integer.MIN_VALUE, Integer.MAX_VALUE);
     public static final ModConfigSpec.IntValue WARNING_TARGET_Z = BUILDER.defineInRange("targetZ", -650, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
+    // 登录传送设置
+    public static final ModConfigSpec.IntValue SPAWN_X = BUILDER
+            .comment("玩家进入服务器时传送的目标 X 坐标")
+            .defineInRange("spawnX", 240, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    public static final ModConfigSpec.IntValue SPAWN_Y = BUILDER
+            .comment("玩家进入服务器时传送的目标 Y 坐标")
+            .defineInRange("spawnY", 65, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    public static final ModConfigSpec.IntValue SPAWN_Z = BUILDER
+            .comment("玩家进入服务器时传送的目标 Z 坐标")
+            .defineInRange("spawnZ", -205, Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+    // 游玩时长限制设置
+    public static final ModConfigSpec.IntValue PLAYTIME_LIMIT = BUILDER
+            .comment("玩家进入服务器后允许游玩的最大时长 (分钟)")
+            .defineInRange("playtimeLimitMinutes", 30, 1, 1440);
+
+    public static final ModConfigSpec.ConfigValue<String> PLAYTIME_KICK_MESSAGE = BUILDER
+            .comment("超过游玩时长限制被踢出时的提示信息")
+            .define("playtimeKickMessage", "你...怎么还不来找我...");
+
     static final ModConfigSpec SPEC = BUILDER.build();
 }

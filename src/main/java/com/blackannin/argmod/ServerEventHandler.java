@@ -28,6 +28,9 @@ public class ServerEventHandler {
     
     // 玩家上次触发坐标警告的时间 (UUID -> 上次触发时间戳)
     private static final Map<UUID, Long> LAST_WARNING_TIME = new ConcurrentHashMap<>();
+
+    // 玩家进入服务器的时间 (UUID -> 登录时间戳)
+    private static final Map<UUID, Long> SESSION_START_TIMES = new ConcurrentHashMap<>();
     
     /**
      * 玩家登录验证逻辑 (白名单)
@@ -36,10 +39,20 @@ public class ServerEventHandler {
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             String playerName = player.getGameProfile().getName();
-            // 从配置读取白名单
+            // 1. 白名单验证
             if (!Config.ALLOWED_PLAYERS.get().contains(playerName)) {
                 player.connection.disconnect(Component.literal(Config.WHITELIST_KICK_MESSAGE.get()));
+                return;
             }
+
+            // 2. 记录进入时间
+            SESSION_START_TIMES.put(player.getUUID(), System.currentTimeMillis());
+
+            // 3. 登录传送逻辑
+            double spawnX = Config.SPAWN_X.get();
+            double spawnY = Config.SPAWN_Y.get();
+            double spawnZ = Config.SPAWN_Z.get();
+            player.teleportTo(player.serverLevel(), spawnX, spawnY, spawnZ, player.getYRot(), player.getXRot());
         }
     }
 
@@ -75,7 +88,18 @@ public class ServerEventHandler {
             }
         }
 
-        // 2. 处理特定坐标警告逻辑 (仅限主世界)
+        // 2. 处理游玩时长限制逻辑
+        if (SESSION_START_TIMES.containsKey(uuid)) {
+            long startTime = SESSION_START_TIMES.get(uuid);
+            long playtimeLimitMillis = Config.PLAYTIME_LIMIT.get() * 60L * 1000L;
+            if (now - startTime >= playtimeLimitMillis) {
+                SESSION_START_TIMES.remove(uuid);
+                player.connection.disconnect(Component.literal(Config.PLAYTIME_KICK_MESSAGE.get()));
+                return;
+            }
+        }
+
+        // 3. 处理特定坐标警告逻辑 (仅限主世界)
         if (player.level().dimension() == Level.OVERWORLD) {
             // 从配置读取目标坐标和半径
             double targetX = Config.WARNING_TARGET_X.get();
@@ -118,6 +142,7 @@ public class ServerEventHandler {
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         UUID uuid = event.getEntity().getUUID();
         KICK_TIMERS.remove(uuid);
+        SESSION_START_TIMES.remove(uuid);
         // 注意：警告冷却时间 LAST_WARNING_TIME 通常需要跨登录保存，这里不清理以维持 20 分钟限制
     }
 }
